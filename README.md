@@ -10,6 +10,7 @@ A template for new Django 1.4 projects developed under Vagrant. Features offered
   of version control) as per http://www.sparklewise.com/django-settings-for-production-and-development-best-practices/
 * South, django-devserver, django-compressor, django-debug-toolbar out of the box
 * A boilerplate base template with jquery included, and various other ideas and best practices borrowed from https://github.com/h5bp/html5-boilerplate
+* Gunicorn setup, production on 8000 (8111 on host) and dev on 8001 (8112 on host)
 
 Setup
 -----
@@ -19,15 +20,23 @@ new ones.)
 
 To start a new project, run the following commands:
 
-    django-admin.py startproject --template https://github.com/tanelikaivola/vagrant-django-template/zipball/master --name=Vagrantfile myproject
+    django-admin.py startproject --template https://github.com/tanelikaivola/vagrant-django-template/zipball/master --name=Vagrantfile,gunicorn_dev,gunicorn_production myproject
     cd myproject
     vagrant up
+      (and at this point you will have http://127.0.0.1:8112/admin/ but no user to log in with)
+
     vagrant ssh
       (then, within the SSH session:)
-    ./manage.py runserver 0.0.0.0:8000
+    ./manage.py createsuperuser --username 'admin_user' --email 'example@example.com'
+    
+    and to restart the service
 
-This will make the app accessible on the host machine as http://localhost:8111/ . The codebase is located on the host
-machine, exported to the VM as a shared folder; code editing and Git operations will generally be done on the host.
+    sudo -i
+    /etc/init.d/gunicorn restart
+
+This will make the app accessible on the host machine as http://localhost:8111/ (production) and http://localhost:8112/ (dev).
+The codebase is located on the host machine, exported to the VM as a shared folder; code editing and Git operations will
+generally be done on the host.
 
 See also
 --------

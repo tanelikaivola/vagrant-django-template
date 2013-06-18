@@ -33,6 +33,10 @@ apt-get install -y build-essential python python-dev python-setuptools python-pi
 apt-get install -y postgresql-$PGSQL_VERSION libpq-dev
 # Dependencies for image processing with PIL
 apt-get install -y libjpeg62-dev zlib1g-dev libfreetype6-dev liblcms1-dev
+# Gunicorn
+apt-get install -y gunicorn
+cp $PROJECT_DIR/etc/install/gunicorn_dev /etc/gunicorn.d/${PROJECT_NAME}_dev
+cp $PROJECT_DIR/etc/install/gunicorn_production /etc/gunicorn.d/${PROJECT_NAME}_production
 
 # postgresql global setup
 cp $PROJECT_DIR/etc/install/pg_hba.conf /etc/postgresql/$PGSQL_VERSION/main/
@@ -63,3 +67,5 @@ chmod a+x $PROJECT_DIR/manage.py
 
 # Django project setup
 su - vagrant -c "source $VIRTUALENV_DIR/bin/activate && cd $PROJECT_DIR && ./manage.py syncdb --noinput && ./manage.py migrate"
+
+/etc/init.d/gunicorn restart
