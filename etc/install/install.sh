@@ -23,6 +23,8 @@ export LANGUAGE=en_GB.UTF-8
 export LANG=en_GB.UTF-8
 export LC_ALL=en_GB.UTF-8
 
+# Update apt to use mirrors
+sed 's@http://us.archive.ubuntu.com/ubuntu/@mirror://mirrors.ubuntu.com/mirrors.txt@' -i /etc/apt/sources.list
 # Install essential packages from Apt
 apt-get update -y
 # Python dev packages
